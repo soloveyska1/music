@@ -204,7 +204,7 @@ end
 
 set_track_color(beat_track, colors.beat)
 rename_track(beat_track, "Beat - Instrumental")
-ensure_channels(beat_track, 4)
+ensure_channels(beat_track, 2)
 assign_volume(beat_track, 0.95)
 
 local beat_fx = {
@@ -230,7 +230,6 @@ local beat_fx = {
       reaper.TrackFX_SetParam(track, fx, 6, 0.0)    -- Knee hard
       reaper.TrackFX_SetParam(track, fx, 7, 0.0)    -- Auto make-up off
       reaper.TrackFX_SetParam(track, fx, 8, 0.0)    -- Pre-comp off
-      reaper.TrackFX_SetParam(track, fx, 16, 0.0)   -- Detector: input L+R
     end
   },
   {
@@ -258,7 +257,7 @@ local vocal_slots = {
 }
 
 local function setup_vocal_fx(track)
-  ensure_channels(track, 4)
+  ensure_channels(track, 2)
   local eq_index = ensure_fx(track, {
     name = "ReaEQ (Cockos)",
     config = function(t, fx)
@@ -282,7 +281,6 @@ local function setup_vocal_fx(track)
       reaper.TrackFX_SetParam(t, fx, 6, 0.0)
       reaper.TrackFX_SetParam(t, fx, 7, 0.0)
       reaper.TrackFX_SetParam(t, fx, 8, 1.5)    -- Pre-comp 1.5 ms
-      reaper.TrackFX_SetParam(t, fx, 16, 0.75)  -- Detector: Aux L+R (для сайдчейна)
     end
   })
 
@@ -295,7 +293,6 @@ local function setup_vocal_fx(track)
       reaper.TrackFX_SetParam(t, fx, 5, 2.0)
       reaper.TrackFX_SetParam(t, fx, 6, 0.0)
       reaper.TrackFX_SetParam(t, fx, 7, 0.0)
-      reaper.TrackFX_SetParam(t, fx, 16, 0.75)
     end
   })
 
@@ -478,7 +475,6 @@ ensure_fx(reference_track, {
 add_send(beat_track, mix_bus, { volume = 1.0 })
 for _, track in ipairs(created_vocals) do
   add_send(track, vocal_bus, { volume = 1.0 })
-  add_send(beat_track, track, { src_chan = 0, dest_chan = 2, volume = 0.7 })
   if track ~= created_vocals[1] then
     add_send(track, verb_aux, { volume = 0.35 })
   end
